@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
   selector: 'app-root',
   imports: [],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('flux_transaction');
