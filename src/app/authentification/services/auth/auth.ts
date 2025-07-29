@@ -11,7 +11,7 @@ export class Auth extends Abstract<any> {
   private router = inject(Router);
   private jwtService = inject(Jwt);
   // login method
-  login(credentials: { username: string; password: string }): Observable<any> {
+  login(credentials: { email: string; password: string }): Observable<any> {
     return this.create(`authenticate`, credentials).pipe(
       tap((response: any) => {
         this.jwtService.token = response.id_token;
