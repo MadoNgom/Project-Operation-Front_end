@@ -12,7 +12,7 @@ export class Auth extends Abstract<any> {
   private jwtService = inject(Jwt);
   // login method
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.create(`authenticate`, credentials).pipe(
+    return this.create(`login`, credentials).pipe(
       tap((response: any) => {
         this.jwtService.token = response.id_token;
         this.read(`account`).subscribe((response: any) => {
