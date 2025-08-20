@@ -16,4 +16,13 @@ export const routes: Routes = [
     path: 'register',
     component: Register,
   },
+  {
+    path: 'backoffice',
+    loadChildren: () => import('./backoffice/backoffice.routes'),
+  },
+  {
+    path: '',
+    redirectTo: 'backoffice',
+    pathMatch: 'full',
+  },
 ];
