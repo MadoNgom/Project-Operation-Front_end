@@ -15,12 +15,26 @@ export class Auth extends Abstract<any> {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.create(`auth/login`, credentials).pipe(
       tap((response: any) => {
+        console.log({ response });
+
         console.log('Response.data:', response.data);
         console.log('Response.data.token:', response.data?.token);
+
+        // set user info in local storage
         if (response.data && response.data.token) {
-          this.jwtService.token = jwtDecode(response.data.token);
+          const token = response.data.token;
+          // set token in local storage
+          localStorage.setItem('auth_token', token);
+          // this.jwtService.token = jwtDecode(token);
           this.read(`utilisateurs/me`).subscribe((userResponse: any) => {
-            localStorage.setItem('user_info', JSON.stringify(userResponse));
+            if (userResponse?.success) {
+              localStorage.setItem(
+                'user_info',
+                JSON.stringify(userResponse?.data)
+              );
+            } else {
+              throw new Error("Échec de l'authentification: user info manquant");
+            }
           });
         } else {
           console.error('Token non trouvé dans la réponse:', response);

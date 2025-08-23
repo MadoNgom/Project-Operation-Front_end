@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://api.transactions.hackbou.com/api',
+  apiUrl: 'https://api.transactions.hackbou.com/api',
 };
