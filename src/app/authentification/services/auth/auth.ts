@@ -33,7 +33,9 @@ export class Auth extends Abstract<any> {
                 JSON.stringify(userResponse?.data)
               );
             } else {
-              throw new Error("Échec de l'authentification: user info manquant");
+              throw new Error(
+                "Échec de l'authentification: user info manquant"
+              );
             }
           });
         } else {
