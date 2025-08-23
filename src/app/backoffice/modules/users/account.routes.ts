@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { Account } from './components/account/account';
 import { Transactions } from '../admin/components/transactions/transactions';
 import { SendTransactions } from './components/send-transactions/send-transactions';
 import { WithdrawMoney } from './components/withdraw-money/withdraw-money';
 import { CancelTransactions } from './components/cancel-transactions/cancel-transactions';
+import { Account } from './account';
 
 export default [
   {
