@@ -1,1 +1,101 @@
+<div class="flex h-screen flex-col lg:flex-row mt-0">
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+  <!-- Content -->
+  <main class="flex-1 ml-50 sm:p-2 bg-gray-50">
+    <!-- User -->
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start my-2 sm:items-center"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          src="https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg"
+          alt="User"
+          class="w-8 h-8 sm:w-8 sm:h-8 rounded-full object-cover"
+        />
+        <div class="text-sm">
+          <h2 class="font-semibold text-sm">John Doe</h2>
+          <p class="text-xs sm:text-xs text-gray-500">johndoe&#64;gmail.com</p>
+        </div>
+      </div>
+      <input
+        type="text"
+        placeholder="Search anything..."
+        class="w-full sm:w-64 border border-gray-300 px-3 py-2 rounded-md text-xs sm:text-xs text-gray-500"
+      />
+    </div>
+
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 my-4"
+    >
+      <div
+        class="bg-gradient-to-br from-purple-400 to-red-300 text-white p-3 rounded-xl shadow-lg space-y-2"
+      >
+        <p class="text-xs sm:text-sm font-semibold">Compte info</p>
+        <h2 class="text-xs text-white">NGN 12,345,000.00</h2>
+        <p class="text-xs sm:text-sm">Account No: 123456789</p>
+      </div>
+      <div class="p-3 rounded-xl shadow-lg bg-white">
+        <p class="text-xs sm:text-sm">Solde Disponible</p>
+        <h2 class="text-base text-gray-700 font-semibold">NGN 12,345,000.00</h2>
+      </div>
+      <div class="p-3 rounded-xl shadow-lg bg-white">
+        <p class="text-xs sm:text-sm">Total Depense</p>
+        <h2 class="text-base text-red-500 font-semibold">NGN 120,000.00</h2>
+      </div>
+      <div class="p-3 rounded-xl shadow-lg bg-white">
+        <p class="text-xs sm:text-sm">Investissement</p>
+        <h2 class="text-base text-green-500 font-semibold">NGN 250,000.00</h2>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6">
+      <canvas
+        baseChart
+        data="lineChartData"
+        options="lineChartOptions"
+        type="'line'"
+      >
+      </canvas>
+    </div>
+
+    <!-- Transactions -->
+    <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 overflow-x-auto">
+      <h3 class="font-bold mb-4 text-sm sm:text-base">Recent Transactions</h3>
+      <table class="w-full text-left text-xs sm:text-sm">
+        <thead class="border-b bg-gray-50">
+          <tr>
+            <th class="py-2 px-2">Recipient</th>
+            <th class="px-2">Amount</th>
+            <th class="px-2">Transfer Name</th>
+            <th class="px-2">Date</th>
+            <th class="px-2">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="py-2 px-2">Ashlynn Vacca</td>
+            <td class="px-2">₦17,300</td>
+            <td class="px-2">Money Transfer</td>
+            <td class="px-2">Nov 01, 2024</td>
+            <td class="px-2">
+              <span class="text-green-600 font-bold">Completed</span>
+            </td>
+          </tr>
+          <tr class="border-b">
+            <td class="py-2 px-2">Brandon Vinton</td>
+            <td class="px-2">₦7,500</td>
+            <td class="px-2">Money Transfer</td>
+            <td class="px-2">Oct 28, 2024</td>
+            <td class="px-2">
+              <span class="text-red-600 font-bold">Failed</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
 <router-outlet></router-outlet>
