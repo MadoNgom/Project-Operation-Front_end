@@ -32,6 +32,8 @@ export class Auth extends Abstract<any> {
                 'user_info',
                 JSON.stringify(userResponse?.data)
               );
+              // Rediriger vers le dashboard après connexion réussie
+              this.router.navigateByUrl('/dashboard');
             } else {
               throw new Error(
                 "Échec de l'authentification: user info manquant"
@@ -85,6 +87,15 @@ export class Auth extends Abstract<any> {
       })
     );
   }
+
+  getUserProfileV2(): Observable<any> {
+    return this.read(`utilisateurs/me`).pipe(
+      tap((response: any) => {
+        localStorage.setItem('user_info', JSON.stringify(response));
+      })
+    );
+  }
+
   // update user profile
   updateUserProfile(data: any): Observable<any> {
     return this.update(`account`, data).pipe(

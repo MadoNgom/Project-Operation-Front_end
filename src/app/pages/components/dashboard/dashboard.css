@@ -1,0 +1,27 @@
+/* Dashboard specific styles */
+.dashboard-container {
+  min-height: 100vh;
+}
+
+.action-card {
+  transition: all 0.3s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+}
+
+.status-badge {
+  transition: all 0.2s ease;
+}
+
+.table-row {
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
+}
