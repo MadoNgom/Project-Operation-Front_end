@@ -16,10 +16,6 @@ export class Auth extends Abstract<any> {
     return this.create(`auth/login`, credentials).pipe(
       tap((response: any) => {
         console.log({ response });
-
-        console.log('Response.data:', response.data);
-        console.log('Response.data.token:', response.data?.token);
-
         // set user info in local storage
         if (response.data && response.data.token) {
           const token = response.data.token;
@@ -56,12 +52,20 @@ export class Auth extends Abstract<any> {
     adresse: string;
     password: string;
   }): Observable<any> {
-    return this.create(`/auth/register`, credentials).pipe(
+    return this.create(`/utilisateurs`, credentials).pipe(
       tap((response: any) => {
-        this.jwtService.token = response.token;
-        this.read(`/utilisateurs/me`).subscribe((response: any) => {
-          localStorage.setItem('user_info', JSON.stringify(response));
-        });
+        if (response.data && response.data.token) {
+          const token = response.data.token;
+          localStorage.setItem('auth_token', token);
+          this.jwtService.token = token; // keep in memory for interceptor
+
+          this.read(`utilisateurs/me`).subscribe((userResponse: any) => {
+            localStorage.setItem('user_info', JSON.stringify(userResponse));
+          });
+        } else {
+          console.error('Token non trouvé dans la réponse:', response);
+          throw new Error("Échec de l'enregistrement: token manquant");
+        }
       })
     );
   }

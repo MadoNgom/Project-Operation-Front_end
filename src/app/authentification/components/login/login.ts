@@ -3,11 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { Register } from '../register/register';
 import { Auth } from '../../services/auth/auth';
 import {
-
-
-
-
-  
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -54,7 +49,3 @@ export class Login {
     }
   }
 }
-
-
-
-
