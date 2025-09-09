@@ -56,14 +56,7 @@ export class Auth extends Abstract<any> {
     adresse: string;
     password: string;
   }): Observable<any> {
-    return this.create(`/auth/register`, credentials).pipe(
-      tap((response: any) => {
-        this.jwtService.token = response.token;
-        this.read(`/utilisateurs/me`).subscribe((response: any) => {
-          localStorage.setItem('user_info', JSON.stringify(response));
-        });
-      })
-    );
+    return this.create(`/auth/register`, credentials);
   }
 
   // check if user is authenticated
