@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from '../../../authentification/services/auth/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nav',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
 })

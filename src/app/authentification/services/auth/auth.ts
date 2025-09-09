@@ -16,10 +16,6 @@ export class Auth extends Abstract<any> {
     return this.create(`auth/login`, credentials).pipe(
       tap((response: any) => {
         console.log({ response });
-
-        console.log('Response.data:', response.data);
-        console.log('Response.data.token:', response.data?.token);
-
         // set user info in local storage
         if (response.data && response.data.token) {
           const token = response.data.token;

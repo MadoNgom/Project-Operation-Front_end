@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-backoffice',
-  imports: [RouterOutlet, Sidebar],
+  imports: [RouterOutlet],
   templateUrl: './backoffice.html',
   styleUrl: './backoffice.css',
 })
