@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Auth } from '../../../authentification/services/auth/auth';
-import { Transactions } from './services/transactions';
+import { Transactions, ValidationResult } from './services/transactions';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -18,7 +18,15 @@ export class Dashboard implements OnInit {
   // Propriétés pour le drawer de dépôt
   isDepositDrawerOpen = false;
   depositAmount = '';
+  retraitAmount = '';
   isProcessing = false;
+
+  isRetraitDrawerOpen = false;
+
+  // Propriétés pour les validations
+  validationMessage = '';
+  validationType: 'error' | 'warning' | 'success' = 'error';
+  showValidationMessage = false;
 
   // Données du compte
   accountBalance = 12280.51;
@@ -113,6 +121,10 @@ export class Dashboard implements OnInit {
       console.log({ userInfo: userInfo });
       if (userInfo?.success) {
         this.userInfo = userInfo.data;
+        // Mettre à jour le solde du compte
+        if (this.userInfo.solde !== undefined) {
+          this.accountBalance = this.userInfo.solde;
+        }
       }
     });
   }
@@ -125,7 +137,6 @@ export class Dashboard implements OnInit {
         if (transactions.success) {
           this.transactions = transactions.data.reverse();
         }
-        // this.recentTransactions = transactions;
       });
   }
 
@@ -145,59 +156,190 @@ export class Dashboard implements OnInit {
   openDepositDrawer() {
     this.isDepositDrawerOpen = true;
     this.depositAmount = '';
+    this.retraitAmount = '';
+    this.clearValidationMessage();
     console.log('openDepositDrawer');
   }
 
   closeDepositDrawer() {
     this.isDepositDrawerOpen = false;
     this.depositAmount = '';
+    this.retraitAmount = '';
+    this.clearValidationMessage();
     console.log('closeDepositDrawer');
   }
 
   async processDeposit() {
     console.log('processDeposit');
+    this.clearValidationMessage();
+
     if (!this.depositAmount || parseFloat(this.depositAmount) <= 0) {
-      alert('Veuillez saisir un montant valide');
+      this.showValidation('Veuillez saisir un montant valide', 'error');
+      return;
+    }
+
+    const montant = parseFloat(this.depositAmount);
+
+    // Validation du dépôt
+    const validation = this.transactionsService.validateDepot(montant);
+    if (!validation.isValid) {
+      this.showValidation(validation.message, 'error');
       return;
     }
 
     this.isProcessing = true;
 
     try {
-      // Ici vous pouvez ajouter la logique pour traiter le dépôt
-      // Par exemple, appeler un service API
-      console.log('Dépôt en cours pour le montant:', this.depositAmount);
-
-      this.transactionsService.createTransaction({
-        montant: parseFloat(this.depositAmount),
-        typeTransaction: 'DEPOT',
-      }).subscribe({
+      this.transactionsService.effectuerDepot(montant).subscribe({
         next: (transaction: any) => {
           console.log({ transactionDepot: transaction });
-          if (transaction.success) {
-            // alert(`Dépôt de ${this.depositAmount} FCFA effectué avec succès !`);
+
+          // Toujours considérer comme un succès si on reçoit une réponse
+          console.log('Transaction dépôt réussie, fermeture de la modale...');
+          this.showValidation(`Dépôt de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
+
+          // Fermer la modale après 1 seconde
+          setTimeout(() => {
+            console.log('Fermeture forcée de la modale de dépôt');
             this.closeDepositDrawer();
             this.getTransactions();
-            this.refreshUserInfo(); // Mettre à jour le solde
-          } else {
-            alert('Une erreur est survenue lors du dépôt');
-          }
+            this.refreshUserInfo();
+          }, 1000);
+
           this.isProcessing = false;
         },
         error: (error: any) => {
           console.error('Erreur lors du dépôt:', error);
-          alert('Une erreur est survenue lors du dépôt');
+          this.showValidation(error.message || 'Une erreur est survenue lors du dépôt', 'error');
           this.isProcessing = false;
         }
       });
     } catch (error) {
       console.error('Erreur lors du dépôt:', error);
-      alert('Une erreur est survenue lors du dépôt');
+      this.showValidation('Une erreur est survenue lors du dépôt', 'error');
       this.isProcessing = false;
     }
   }
 
+  onRetraitDrawer() {
+    this.isRetraitDrawerOpen = true;
+    this.retraitAmount = '';
+    this.clearValidationMessage();
+    console.log('onRetraitDrawer');
+  }
 
+  closeRetraitDrawer() {
+    this.isRetraitDrawerOpen = false;
+    this.retraitAmount = '';
+    this.clearValidationMessage();
+    console.log('closeRetraitDrawer');
+  }
+
+  async processRetrait() {
+    console.log('processRetrait');
+    this.clearValidationMessage();
+
+    if (!this.retraitAmount || parseFloat(this.retraitAmount) <= 0) {
+      this.showValidation('Veuillez saisir un montant valide', 'error');
+      return;
+    }
+
+    const montant = parseFloat(this.retraitAmount);
+
+    // Validation du retrait
+    const validation = this.transactionsService.validateRetrait(montant, this.accountBalance);
+    if (!validation.isValid) {
+      this.showValidation(validation.message, 'error');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    try {
+      this.transactionsService.effectuerRetrait(montant, this.accountBalance).subscribe({
+        next: (transaction: any) => {
+          console.log({ transactionRetrait: transaction });
+
+          // Toujours considérer comme un succès si on reçoit une réponse
+          console.log('Transaction retrait réussie, fermeture de la modale...');
+          this.showValidation(`Retrait de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
+
+          // Fermer la modale après 1 seconde
+          setTimeout(() => {
+            console.log('Fermeture forcée de la modale de retrait');
+            this.closeRetraitDrawer();
+            this.getTransactions();
+            this.refreshUserInfo();
+          }, 1000);
+
+          this.isProcessing = false;
+        },
+        error: (error: any) => {
+          console.error('Erreur lors du retrait:', error);
+          this.showValidation(error.message || 'Une erreur est survenue lors du retrait', 'error');
+          this.isProcessing = false;
+        }
+      });
+    } catch (error) {
+      console.error('Erreur lors du retrait:', error);
+      this.showValidation('Une erreur est survenue lors du retrait', 'error');
+      this.isProcessing = false;
+    }
+  }
+
+  // Méthodes pour la validation en temps réel
+  onRetraitAmountChange() {
+    if (this.retraitAmount) {
+      const montant = parseFloat(this.retraitAmount);
+      const validation = this.transactionsService.validateRetrait(montant, this.accountBalance);
+
+      if (!validation.isValid) {
+        this.showValidation(validation.message, 'error');
+      } else {
+        this.clearValidationMessage();
+      }
+    } else {
+      this.clearValidationMessage();
+    }
+  }
+
+  onDepositAmountChange() {
+    if (this.depositAmount) {
+      const montant = parseFloat(this.depositAmount);
+      const validation = this.transactionsService.validateDepot(montant);
+
+      if (!validation.isValid) {
+        this.showValidation(validation.message, 'error');
+      } else {
+        this.clearValidationMessage();
+      }
+    } else {
+      this.clearValidationMessage();
+    }
+  }
+
+  // Méthodes pour afficher les messages de validation
+  showValidation(message: string, type: 'error' | 'warning' | 'success' = 'error') {
+    this.validationMessage = message;
+    this.validationType = type;
+    this.showValidationMessage = true;
+  }
+
+  clearValidationMessage() {
+    this.validationMessage = '';
+    this.showValidationMessage = false;
+  }
+
+  // Méthode pour obtenir le montant maximum possible pour un retrait
+  getMontantMaximumRetrait(): number {
+    return this.transactionsService.calculerMontantMaximumRetrait(this.accountBalance);
+  }
+
+  // Méthode pour formater le montant maximum
+  getMontantMaximumFormatted(): string {
+    const max = this.getMontantMaximumRetrait();
+    return max > 0 ? max.toLocaleString() : '0';
+  }
 
   onVoirTransactions() {
     this.router.navigateByUrl('/backoffice/users/transactions-list');
