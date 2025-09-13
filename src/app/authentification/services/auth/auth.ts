@@ -112,4 +112,9 @@ export class Auth extends Abstract<any> {
       })
     );
   }
+
+  // get all users
+  getUsers(): Observable<any> {
+    return this.read(`utilisateurs`);
+  }
 }

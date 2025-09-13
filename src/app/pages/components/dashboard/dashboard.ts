@@ -23,6 +23,13 @@ export class Dashboard implements OnInit {
 
   isRetraitDrawerOpen = false;
 
+  // Propriétés pour le drawer de virement
+  isVirementDrawerOpen = false;
+  virementAmount = '';
+  selectedUserId = '';
+  users: any[] = [];
+  searchTerm = '';
+
   // Propriétés pour les validations
   validationMessage = '';
   validationType: 'error' | 'warning' | 'success' = 'error';
@@ -107,13 +114,18 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    this.checkAuth();
+
+    this.refreshUserInfo();
+    this.getTransactions();
+  }
+
+  checkAuth() {
     if (!this.auth.isAuthenticated()) {
       this.router.navigateByUrl('/login');
       return;
     }
-
-    this.refreshUserInfo();
-    this.getTransactions();
   }
 
   refreshUserInfo() {
@@ -149,7 +161,7 @@ export class Dashboard implements OnInit {
   }
 
   onTransfert() {
-    this.router.navigateByUrl('/backoffice/users/send-transactions');
+    this.openVirementDrawer();
   }
 
   // Méthodes pour le drawer de dépôt
@@ -284,6 +296,124 @@ export class Dashboard implements OnInit {
       console.error('Erreur lors du retrait:', error);
       this.showValidation('Une erreur est survenue lors du retrait', 'error');
       this.isProcessing = false;
+    }
+  }
+
+  // Méthodes pour le drawer de virement
+  openVirementDrawer() {
+    this.isVirementDrawerOpen = true;
+    this.virementAmount = '';
+    this.selectedUserId = '';
+    this.searchTerm = '';
+    this.clearValidationMessage();
+    this.getUsers();
+    console.log('openVirementDrawer');
+  }
+
+  closeVirementDrawer() {
+    this.isVirementDrawerOpen = false;
+    this.virementAmount = '';
+    this.selectedUserId = '';
+    this.searchTerm = '';
+    this.clearValidationMessage();
+    console.log('closeVirementDrawer');
+  }
+
+  getUsers() {
+    // Récupérer la liste des utilisateurs (en excluant l'utilisateur actuel)
+    this.auth.getUsers().subscribe((response: any) => {
+      if (response?.success) {
+        // Filtrer pour exclure l'utilisateur actuel
+        this.users = response.data.filter((user: any) => user.id !== this.userInfo?.id);
+      }
+    });
+  }
+
+  selectUser(user: any) {
+    this.selectedUserId = user.id;
+    this.searchTerm = `${user.prenom} ${user.nom}`;
+  }
+
+  getSelectedUser() {
+    return this.users.find(user => user.id === this.selectedUserId);
+  }
+
+  clearUserSelection() {
+    this.selectedUserId = '';
+    this.searchTerm = '';
+    this.virementAmount = '';
+    this.clearValidationMessage();
+  }
+
+  async processVirement() {
+    console.log('processVirement');
+    this.clearValidationMessage();
+
+    if (!this.virementAmount || parseFloat(this.virementAmount) <= 0) {
+      this.showValidation('Veuillez saisir un montant valide', 'error');
+      return;
+    }
+
+    if (!this.selectedUserId) {
+      this.showValidation('Veuillez sélectionner un destinataire', 'error');
+      return;
+    }
+
+    const montant = parseFloat(this.virementAmount);
+
+    // Validation du virement
+    const validation = this.transactionsService.validateVirement(montant, this.accountBalance);
+    if (!validation.isValid) {
+      this.showValidation(validation.message, 'error');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    try {
+      this.transactionsService.effectuerVirement(montant, this.selectedUserId).subscribe({
+        next: (transaction: any) => {
+          console.log({ transactionVirement: transaction });
+
+          // Toujours considérer comme un succès si on reçoit une réponse
+          console.log('Transaction virement réussie, fermeture de la modale...');
+          this.showValidation(`Virement de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
+
+          // Fermer la modale après 1 seconde
+          setTimeout(() => {
+            console.log('Fermeture forcée de la modale de virement');
+            this.closeVirementDrawer();
+            this.getTransactions();
+            this.refreshUserInfo();
+          }, 1000);
+
+          this.isProcessing = false;
+        },
+        error: (error: any) => {
+          console.error('Erreur lors du virement:', error);
+          this.showValidation(error.message || 'Une erreur est survenue lors du virement', 'error');
+          this.isProcessing = false;
+        }
+      });
+    } catch (error) {
+      console.error('Erreur lors du virement:', error);
+      this.showValidation('Une erreur est survenue lors du virement', 'error');
+      this.isProcessing = false;
+    }
+  }
+
+  onVirementAmountChange() {
+    if (this.virementAmount) {
+      const montant = parseFloat(this.virementAmount);
+      const validation = this.transactionsService.validateVirement(montant, this.accountBalance);
+
+      if (!validation.isValid) {
+        this.showValidation(validation.message, 'error');
+      } else {
+        this.clearValidationMessage();
+      }
+    } else {
+      this.clearValidationMessage();
     }
   }
 
