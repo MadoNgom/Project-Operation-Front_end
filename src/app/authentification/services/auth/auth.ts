@@ -15,30 +15,27 @@ export class Auth extends Abstract<any> {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.create(`auth/login`, credentials).pipe(
       tap((response: any) => {
-        console.log({ response });
-        // set user info in local storage
         if (response.data && response.data.token) {
           const token = response.data.token;
-          // set token in local storage
           localStorage.setItem('auth_token', token);
-          // this.jwtService.token = jwtDecode(token);
-          this.read(`utilisateurs/me`).subscribe((userResponse: any) => {
-            if (userResponse?.success) {
-              localStorage.setItem(
-                'user_info',
-                JSON.stringify(userResponse?.data)
-              );
-              // Rediriger vers le dashboard après connexion réussie
-              this.router.navigateByUrl('/dashboard');
-            } else {
-              throw new Error(
-                "Échec de l'authentification: user info manquant"
-              );
-            }
+
+          // Récupérer les infos utilisateur
+          this.read(`utilisateurs/me`).subscribe({
+            next: (userResponse: any) => {
+              if (userResponse?.success) {
+                const userInfo = userResponse.data;
+                localStorage.setItem('user_info', JSON.stringify(userInfo));
+
+                // Récupérer les transactions avec la fonction dédiée
+              } else {
+                throw new Error(
+                  "Échec de l'authentification: user info manquant"
+                );
+              }
+            },
+            error: (err) =>
+              console.error('Erreur récupération user info:', err),
           });
-        } else {
-          console.error('Token non trouvé dans la réponse:', response);
-          throw new Error("Échec de l'authentification: token manquant");
         }
       })
     );

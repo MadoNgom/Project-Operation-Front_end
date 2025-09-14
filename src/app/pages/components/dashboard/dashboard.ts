@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Auth } from '../../../authentification/services/auth/auth';
@@ -13,8 +13,14 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./dashboard.css'],
 })
 export class Dashboard implements OnInit {
-  userInfo: any;
+  private auth = inject(Auth);
+  private router = inject(Router);
+  private transactionsService = inject(Transactions);
+  private cd = inject(ChangeDetectorRef);
 
+  transactions: any[] = [];
+  userInfo: any;
+  isLoading = false;
   // Propriétés pour le drawer de dépôt
   isDepositDrawerOpen = false;
   depositAmount = '';
@@ -37,119 +43,43 @@ export class Dashboard implements OnInit {
 
   // Données du compte
   accountBalance = 12280.51;
-  cards = [
-    {
-      number: '3600',
-      expiry: '04/24',
-      balance: 10000.0,
-      color: 'from-gray-600 to-teal-600',
-    },
-    {
-      number: '6997',
-      expiry: '12/25',
-      balance: 2280.51,
-      color: 'from-gray-400 to-gray-500',
-    },
-  ];
   vaultBalance = 79000.0;
 
-  // Transactions récentes
-  recentTransactions = [
-    {
-      date: 'Lun, 1 Mar',
-      transactions: [
-        {
-          type: 'payment',
-          description: 'Paiement à Nick',
-          amount: -560.0,
-          icon: 'red',
-          selected: false,
-        },
-        {
-          type: 'receive',
-          description: 'Reception Salaire',
-          amount: 12200.0,
-          icon: 'black',
-          selected: false,
-        },
-        {
-          type: 'transfer',
-          description: 'Transfert Moneygram',
-          amount: -3000.0,
-          icon: 'red',
-          selected: false,
-        },
-      ],
-    },
-    {
-      date: 'Lun, 1 Mar',
-      transactions: [
-        {
-          type: 'receive',
-          description: 'Reception Remboursement',
-          amount: 1550.0,
-          icon: 'black',
-          selected: true,
-        },
-      ],
-    },
-  ];
-
-  transactions: any[] = [];
-
-  // Détails de la transaction sélectionnée
-  selectedTransaction = {
-    from: 'Olith Bank Refund',
-    amount: 1550.0,
-    type: 'Cash Refund',
-    category: 'Annual Cashback',
-    time: '13:48 Lun, 1 Mar',
-  };
-
-  constructor(
-    private auth: Auth,
-    private router: Router,
-    private transactionsService: Transactions,
-    private userService: Auth
-  ) {}
-
   ngOnInit() {
-
-    this.checkAuth();
-
-    this.refreshUserInfo();
-    this.getTransactions();
+    this.loadTransactionsAndUser();
   }
-
-  checkAuth() {
-    if (!this.auth.isAuthenticated()) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
-  }
-
-  refreshUserInfo() {
-    this.auth.getUserProfileV2().subscribe((userInfo: any) => {
-      console.log({ userInfo: userInfo });
-      if (userInfo?.success) {
-        this.userInfo = userInfo.data;
-        // Mettre à jour le solde du compte
-        if (this.userInfo.solde !== undefined) {
-          this.accountBalance = this.userInfo.solde;
+  getTransactions() {
+    this.transactionsService.getTransactionsByUserId().subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.transactions = res.data.slice().reverse();
+          localStorage.setItem(
+            'transactions',
+            JSON.stringify(this.transactions)
+          );
+          this.cd.detectChanges();
         }
-      }
+      },
+      error: (err: any) => console.error(err),
+      complete: () => (this.isLoading = false),
     });
   }
 
-  getTransactions() {
-    this.transactionsService
-      .getTransactionsByUserId()
-      .subscribe((transactions: any) => {
-        console.log({ transactions: transactions.data });
-        if (transactions.success) {
-          this.transactions = transactions.data.reverse();
-        }
-      });
+  loadTransactionsAndUser() {
+    this.isLoading = true;
+    // Charger le cache local
+    const savedTransactions = localStorage.getItem('transactions');
+    if (savedTransactions) {
+      this.transactions = JSON.parse(savedTransactions);
+    }
+    // Recharger depuis l’API
+    this.auth.getUserProfileV2().subscribe((userInfo) => {
+      if (userInfo?.success) {
+        this.userInfo = userInfo.data;
+        this.accountBalance = this.userInfo.solde ?? this.accountBalance;
+      }
+    });
+    this.getTransactions();
   }
 
   onDepot() {
@@ -180,19 +110,27 @@ export class Dashboard implements OnInit {
     this.clearValidationMessage();
     console.log('closeDepositDrawer');
   }
+  // Met à jour le solde en fonction du type de transaction
+  updateBalance(type: 'deposit' | 'withdraw' | 'virement', montant: number) {
+    if (type === 'deposit') {
+      this.accountBalance += montant;
+    } else if (type === 'withdraw' || type === 'virement') {
+      this.accountBalance -= montant;
+    }
 
-  async processDeposit() {
-    console.log('processDeposit');
+    // Forcer Angular à détecter le changement
+    this.cd.detectChanges();
+  }
+
+  processDeposit() {
     this.clearValidationMessage();
 
-    if (!this.depositAmount || parseFloat(this.depositAmount) <= 0) {
+    const montant = parseFloat(this.depositAmount);
+    if (!montant || montant <= 0) {
       this.showValidation('Veuillez saisir un montant valide', 'error');
       return;
     }
 
-    const montant = parseFloat(this.depositAmount);
-
-    // Validation du dépôt
     const validation = this.transactionsService.validateDepot(montant);
     if (!validation.isValid) {
       this.showValidation(validation.message, 'error');
@@ -201,36 +139,137 @@ export class Dashboard implements OnInit {
 
     this.isProcessing = true;
 
-    try {
-      this.transactionsService.effectuerDepot(montant).subscribe({
+    this.transactionsService.effectuerDepot(montant).subscribe({
+      next: (transaction: any) => {
+        console.log({ transactionDepot: transaction });
+
+        this.updateBalance('deposit', montant);
+        this.showValidation(
+          `Dépôt de ${montant.toLocaleString()} FCFA effectué avec succès !`,
+          'success'
+        );
+
+        setTimeout(() => {
+          this.closeDepositDrawer();
+          this.getTransactions();
+        }, 1000);
+
+        this.isProcessing = false;
+      },
+      error: (error: any) => {
+        console.error('Erreur lors du dépôt:', error);
+        this.showValidation(
+          error.message || 'Une erreur est survenue lors du dépôt',
+          'error'
+        );
+        this.isProcessing = false;
+      },
+    });
+  }
+
+  processRetrait() {
+    this.clearValidationMessage();
+
+    const montant = parseFloat(this.retraitAmount);
+    if (!montant || montant <= 0) {
+      this.showValidation('Veuillez saisir un montant valide', 'error');
+      return;
+    }
+
+    const validation = this.transactionsService.validateRetrait(
+      montant,
+      this.accountBalance
+    );
+    if (!validation.isValid) {
+      this.showValidation(validation.message, 'error');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    this.transactionsService
+      .effectuerRetrait(montant, this.accountBalance)
+      .subscribe({
         next: (transaction: any) => {
-          console.log({ transactionDepot: transaction });
+          console.log({ transactionRetrait: transaction });
 
-          // Toujours considérer comme un succès si on reçoit une réponse
-          console.log('Transaction dépôt réussie, fermeture de la modale...');
-          this.showValidation(`Dépôt de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
+          this.updateBalance('withdraw', montant);
+          this.showValidation(
+            `Retrait de ${montant.toLocaleString()} FCFA effectué avec succès !`,
+            'success'
+          );
 
-          // Fermer la modale après 1 seconde
           setTimeout(() => {
-            console.log('Fermeture forcée de la modale de dépôt');
-            this.closeDepositDrawer();
+            this.closeRetraitDrawer();
             this.getTransactions();
-            this.refreshUserInfo();
           }, 1000);
 
           this.isProcessing = false;
         },
         error: (error: any) => {
-          console.error('Erreur lors du dépôt:', error);
-          this.showValidation(error.message || 'Une erreur est survenue lors du dépôt', 'error');
+          console.error('Erreur lors du retrait:', error);
+          this.showValidation(
+            error.message || 'Une erreur est survenue lors du retrait',
+            'error'
+          );
           this.isProcessing = false;
-        }
+        },
       });
-    } catch (error) {
-      console.error('Erreur lors du dépôt:', error);
-      this.showValidation('Une erreur est survenue lors du dépôt', 'error');
-      this.isProcessing = false;
+  }
+
+  processVirement() {
+    this.clearValidationMessage();
+
+    const montant = parseFloat(this.virementAmount);
+    if (!montant || montant <= 0) {
+      this.showValidation('Veuillez saisir un montant valide', 'error');
+      return;
     }
+
+    if (!this.selectedUserId) {
+      this.showValidation('Veuillez sélectionner un destinataire', 'error');
+      return;
+    }
+
+    const validation = this.transactionsService.validateVirement(
+      montant,
+      this.accountBalance
+    );
+    if (!validation.isValid) {
+      this.showValidation(validation.message, 'error');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    this.transactionsService
+      .effectuerVirement(montant, this.selectedUserId)
+      .subscribe({
+        next: (transaction: any) => {
+          console.log({ transactionVirement: transaction });
+
+          this.updateBalance('virement', montant);
+          this.showValidation(
+            `Virement de ${montant.toLocaleString()} FCFA effectué avec succès !`,
+            'success'
+          );
+
+          setTimeout(() => {
+            this.closeVirementDrawer();
+            this.getTransactions();
+          }, 1000);
+
+          this.isProcessing = false;
+        },
+        error: (error: any) => {
+          console.error('Erreur lors du virement:', error);
+          this.showValidation(
+            error.message || 'Une erreur est survenue lors du virement',
+            'error'
+          );
+          this.isProcessing = false;
+        },
+      });
   }
 
   onRetraitDrawer() {
@@ -245,58 +284,6 @@ export class Dashboard implements OnInit {
     this.retraitAmount = '';
     this.clearValidationMessage();
     console.log('closeRetraitDrawer');
-  }
-
-  async processRetrait() {
-    console.log('processRetrait');
-    this.clearValidationMessage();
-
-    if (!this.retraitAmount || parseFloat(this.retraitAmount) <= 0) {
-      this.showValidation('Veuillez saisir un montant valide', 'error');
-      return;
-    }
-
-    const montant = parseFloat(this.retraitAmount);
-
-    // Validation du retrait
-    const validation = this.transactionsService.validateRetrait(montant, this.accountBalance);
-    if (!validation.isValid) {
-      this.showValidation(validation.message, 'error');
-      return;
-    }
-
-    this.isProcessing = true;
-
-    try {
-      this.transactionsService.effectuerRetrait(montant, this.accountBalance).subscribe({
-        next: (transaction: any) => {
-          console.log({ transactionRetrait: transaction });
-
-          // Toujours considérer comme un succès si on reçoit une réponse
-          console.log('Transaction retrait réussie, fermeture de la modale...');
-          this.showValidation(`Retrait de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
-
-          // Fermer la modale après 1 seconde
-          setTimeout(() => {
-            console.log('Fermeture forcée de la modale de retrait');
-            this.closeRetraitDrawer();
-            this.getTransactions();
-            this.refreshUserInfo();
-          }, 1000);
-
-          this.isProcessing = false;
-        },
-        error: (error: any) => {
-          console.error('Erreur lors du retrait:', error);
-          this.showValidation(error.message || 'Une erreur est survenue lors du retrait', 'error');
-          this.isProcessing = false;
-        }
-      });
-    } catch (error) {
-      console.error('Erreur lors du retrait:', error);
-      this.showValidation('Une erreur est survenue lors du retrait', 'error');
-      this.isProcessing = false;
-    }
   }
 
   // Méthodes pour le drawer de virement
@@ -324,7 +311,9 @@ export class Dashboard implements OnInit {
     this.auth.getUsers().subscribe((response: any) => {
       if (response?.success) {
         // Filtrer pour exclure l'utilisateur actuel
-        this.users = response.data.filter((user: any) => user.id !== this.userInfo?.id);
+        this.users = response.data.filter(
+          (user: any) => user.id !== this.userInfo?.id
+        );
       }
     });
   }
@@ -335,7 +324,7 @@ export class Dashboard implements OnInit {
   }
 
   getSelectedUser() {
-    return this.users.find(user => user.id === this.selectedUserId);
+    return this.users.find((user) => user.id === this.selectedUserId);
   }
 
   clearUserSelection() {
@@ -345,67 +334,13 @@ export class Dashboard implements OnInit {
     this.clearValidationMessage();
   }
 
-  async processVirement() {
-    console.log('processVirement');
-    this.clearValidationMessage();
-
-    if (!this.virementAmount || parseFloat(this.virementAmount) <= 0) {
-      this.showValidation('Veuillez saisir un montant valide', 'error');
-      return;
-    }
-
-    if (!this.selectedUserId) {
-      this.showValidation('Veuillez sélectionner un destinataire', 'error');
-      return;
-    }
-
-    const montant = parseFloat(this.virementAmount);
-
-    // Validation du virement
-    const validation = this.transactionsService.validateVirement(montant, this.accountBalance);
-    if (!validation.isValid) {
-      this.showValidation(validation.message, 'error');
-      return;
-    }
-
-    this.isProcessing = true;
-
-    try {
-      this.transactionsService.effectuerVirement(montant, this.selectedUserId).subscribe({
-        next: (transaction: any) => {
-          console.log({ transactionVirement: transaction });
-
-          // Toujours considérer comme un succès si on reçoit une réponse
-          console.log('Transaction virement réussie, fermeture de la modale...');
-          this.showValidation(`Virement de ${montant.toLocaleString()} FCFA effectué avec succès !`, 'success');
-
-          // Fermer la modale après 1 seconde
-          setTimeout(() => {
-            console.log('Fermeture forcée de la modale de virement');
-            this.closeVirementDrawer();
-            this.getTransactions();
-            this.refreshUserInfo();
-          }, 1000);
-
-          this.isProcessing = false;
-        },
-        error: (error: any) => {
-          console.error('Erreur lors du virement:', error);
-          this.showValidation(error.message || 'Une erreur est survenue lors du virement', 'error');
-          this.isProcessing = false;
-        }
-      });
-    } catch (error) {
-      console.error('Erreur lors du virement:', error);
-      this.showValidation('Une erreur est survenue lors du virement', 'error');
-      this.isProcessing = false;
-    }
-  }
-
   onVirementAmountChange() {
     if (this.virementAmount) {
       const montant = parseFloat(this.virementAmount);
-      const validation = this.transactionsService.validateVirement(montant, this.accountBalance);
+      const validation = this.transactionsService.validateVirement(
+        montant,
+        this.accountBalance
+      );
 
       if (!validation.isValid) {
         this.showValidation(validation.message, 'error');
@@ -421,7 +356,10 @@ export class Dashboard implements OnInit {
   onRetraitAmountChange() {
     if (this.retraitAmount) {
       const montant = parseFloat(this.retraitAmount);
-      const validation = this.transactionsService.validateRetrait(montant, this.accountBalance);
+      const validation = this.transactionsService.validateRetrait(
+        montant,
+        this.accountBalance
+      );
 
       if (!validation.isValid) {
         this.showValidation(validation.message, 'error');
@@ -449,7 +387,10 @@ export class Dashboard implements OnInit {
   }
 
   // Méthodes pour afficher les messages de validation
-  showValidation(message: string, type: 'error' | 'warning' | 'success' = 'error') {
+  showValidation(
+    message: string,
+    type: 'error' | 'warning' | 'success' = 'error'
+  ) {
     this.validationMessage = message;
     this.validationType = type;
     this.showValidationMessage = true;
@@ -462,7 +403,9 @@ export class Dashboard implements OnInit {
 
   // Méthode pour obtenir le montant maximum possible pour un retrait
   getMontantMaximumRetrait(): number {
-    return this.transactionsService.calculerMontantMaximumRetrait(this.accountBalance);
+    return this.transactionsService.calculerMontantMaximumRetrait(
+      this.accountBalance
+    );
   }
 
   // Méthode pour formater le montant maximum
@@ -520,7 +463,11 @@ export class Dashboard implements OnInit {
     }
     // Si c'est dans les 7 derniers jours
     else if (diffDays <= 7) {
-      return date.toLocaleDateString('fr-FR', { weekday: 'long', hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
     }
     // Sinon, format complet
     else {

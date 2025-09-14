@@ -10,12 +10,12 @@ export class Jwt {
     localStorage.setItem('auth_token', id_token);
   }
   // Get token
-  get token(): string | null {
+  get getToken(): string | null {
     return localStorage.getItem('auth_token');
   }
   // Check if the token is valid
   isTokenValid(): boolean {
-    const token = this.token;
+    const token = this.getToken;
     if (!token) {
       return false;
     }
