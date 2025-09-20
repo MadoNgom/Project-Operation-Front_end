@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  flux-transaction-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flux-transaction-frontend
+    ports:
+      - "4200:4200"
+    restart: unless-stopped

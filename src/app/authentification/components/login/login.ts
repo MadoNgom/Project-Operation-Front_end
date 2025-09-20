@@ -39,8 +39,8 @@ export class Login {
       this.auth.login(prepare).subscribe({
         next: (response) => {
           // Handle successful login
-          console.log('connecté', response);
-          this.router.navigate(['/dashboard']);
+          // console.log('connecté', response);
+          this.router.navigate(['/']);
         },
         error: (error) => {
           // Handle login error

@@ -2,7 +2,7 @@
   <!-- Sidebar -->
   <div class="w-full bg-gradient-to-b from-purple-700 to-orange-600 shadow-xl">
     <div
-      class="p-4 md:p-6 container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+      class="p-2 sm:p-4 md:p-6 container mx-auto flex flex-row justify-between items-center space-y-4 md:space-y-0"
     >
       <!-- Branding -->
       <div class="flex items-center space-x-2 md:space-x-4">
@@ -59,21 +59,21 @@
       </div>
     </div>
 
-    <div class="container mx-auto px-4 md:px-8 py-2">
+    <div class="container mx-auto px-2 sm:px-4 md:px-8 py-1 sm:py-2">
       <!-- Header Section -->
-      <div class="flex justify-between items-start mb-4">
+      <div class="flex justify-between items-start mb-2 sm:mb-4">
         <div>
-          <h1 class="text-2xl md:text-5xl font-bold text-white">
+          <h1 class="text-lg sm:text-2xl md:text-5xl font-bold text-white">
             Bon retour, {{ userInfo?.prenom }} !
           </h1>
         </div>
       </div>
 
       <!-- Overview Section -->
-      <div class="grid grid-cols-1 gap-4 md:gap-8 mb-4 md:mb-8">
+      <div class="grid grid-cols-1 gap-2 sm:gap-4 md:gap-8 mb-2 sm:mb-4 md:mb-8">
         <!-- Total Balance Card (Large) -->
         <div class="bg-white rounded-xl shadow-sm p-4 md:p-6">
-          <div class="flex justify-between items-start mb-4">
+          <div class="flex justify-between items-start mb-2 sm:mb-4">
             <div>
               <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">
                 {{
@@ -89,7 +89,7 @@
           <div class="flex flex-wrap gap-2 md:gap-4">
             <button
               (click)="openDepositDrawer()"
-              class="flex items-center space-x-2 bg-green-100 text-green-800 px-3 md:px-4 py-2 rounded-lg hover:bg-green-200 transition-colors cursor-pointer text-sm"
+              class="flex items-center space-x-2 bg-green-100 text-green-800 px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg hover:bg-green-200 transition-colors cursor-pointer text-sm"
             >
               <svg
                 class="w-4 h-4 text-green-800"
@@ -108,7 +108,7 @@
             </button>
             <button
               (click)="onRetraitDrawer()"
-              class="flex items-center space-x-2 bg-red-100 text-red-700 px-3 md:px-4 py-2 rounded-lg hover:bg-red-200 transition-colors cursor-pointer text-sm"
+              class="flex items-center space-x-2 bg-red-100 text-red-700 px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg hover:bg-red-200 transition-colors cursor-pointer text-sm"
             >
               <svg
                 class="w-4 h-4"
@@ -127,7 +127,7 @@
             </button>
             <button
               (click)="onTransfert()"
-              class="flex items-center space-x-2 bg-orange-600 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors cursor-pointer text-sm"
+              class="flex items-center space-x-2 bg-orange-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors cursor-pointer text-sm"
             >
               <svg
                 class="w-4 h-4"
@@ -152,7 +152,7 @@
 
   <!-- Main Content -->
   <div class="flex-1 overflow-auto bg-gray-50">
-    <div class="p-4 md:p-8 container mx-auto">
+    <div class="p-0 sm:p-4 md:p-8 container mx-auto">
       <!-- Bottom Section -->
       <div class="grid grid-cols-1 gap-4 md:gap-8">
         <!-- Transactions History Card -->
@@ -162,7 +162,7 @@
             <h3 class="text-base md:text-lg font-semibold text-gray-800">
               Historique des transactions
             </h3>
-            <div class="flex space-x-2">
+            <!-- <div class="flex space-x-2">
               <button
                 class="px-2 md:px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs md:text-sm hover:bg-gray-200 transition-colors"
               >
@@ -185,7 +185,7 @@
                   ></path>
                 </svg>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <!-- Table Header -->
@@ -341,703 +341,704 @@
         </div>
       </div>
 
-      <!-- Drawer de Dépôt -->
+    </div>
+  </div>
+</div>
+
+<!-- Drawer de Dépôt -->
+<div
+  *ngIf="isDepositDrawerOpen"
+  class="fixed inset-0 z-50 overflow-hidden"
+>
+  <!-- Drawer -->
+  <div
+    class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+  >
+    <div class="flex flex-col h-full">
+      <!-- Header -->
       <div
-        *ngIf="isDepositDrawerOpen"
-        class="fixed inset-0 z-50 overflow-hidden"
+        class="flex items-center justify-between p-2 sm:p-6 border-b border-gray-200"
       >
-        <!-- Drawer -->
-        <div
-          class="absolute right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+        <h2 class="text-xl font-semibold text-gray-800">
+          Effectuer un dépôt
+        </h2>
+        <button
+          (click)="closeDepositDrawer()"
+          class="text-gray-400 hover:text-gray-600 transition-colors"
         >
-          <div class="flex flex-col h-full">
-            <!-- Header -->
-            <div
-              class="flex items-center justify-between p-6 border-b border-gray-200"
-            >
-              <h2 class="text-xl font-semibold text-gray-800">
-                Effectuer un dépôt
-              </h2>
-              <button
-                (click)="closeDepositDrawer()"
-                class="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Content -->
-            <div class="flex-1 p-6">
-              <div class="space-y-6">
-                <!-- Informations du compte -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                  <h3 class="text-sm font-medium text-gray-700 mb-2">
-                    Compte actuel
-                  </h3>
-                  <p class="text-2xl font-bold text-gray-800">
-                    {{
-                      userInfo?.compte?.solde?.toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2
-                      })
-                    }}
-                    FCFA
-                  </p>
-                </div>
-
-                <!-- Message de validation -->
-                <div
-                  *ngIf="showValidationMessage"
-                  class="p-3 rounded-lg text-sm"
-                  [ngClass]="{
-                    'bg-red-100 text-red-700 border border-red-200':
-                      validationType === 'error',
-                    'bg-yellow-100 text-yellow-700 border border-yellow-200':
-                      validationType === 'warning',
-                    'bg-green-100 text-green-700 border border-green-200':
-                      validationType === 'success'
-                  }"
-                >
-                  {{ validationMessage }}
-                </div>
-
-                <!-- Formulaire de dépôt -->
-                <div class="space-y-4">
-                  <div>
-                    <label
-                      for="depositAmount"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Montant à déposer (FCFA)
-                    </label>
-                    <input
-                      type="number"
-                      id="depositAmount"
-                      [(ngModel)]="depositAmount"
-                      (input)="onDepositAmountChange()"
-                      placeholder="0.00"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      [disabled]="isProcessing"
-                    />
-                    <p class="text-xs text-gray-500 mt-1">
-                      Montant minimum: 100 FCFA | Maximum: 1,000,000 FCFA
-                    </p>
-                  </div>
-
-                  <!-- Montants rapides -->
-                  <div>
-                    <p class="text-sm font-medium text-gray-700 mb-3">
-                      Montants rapides
-                    </p>
-                    <div class="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        (click)="
-                          depositAmount = '1000'; onDepositAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        1,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          depositAmount = '5000'; onDepositAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        5,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          depositAmount = '10000'; onDepositAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        10,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          depositAmount = '50000'; onDepositAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        50,000 FCFA
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="p-6 border-t border-gray-200">
-              <div class="space-y-3">
-                <button
-                  (click)="processDeposit()"
-                  [disabled]="!depositAmount || isProcessing"
-                  class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span *ngIf="!isProcessing">Confirmer le dépôt</span>
-                  <span
-                    *ngIf="isProcessing"
-                    class="flex items-center justify-center"
-                  >
-                    <svg
-                      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Traitement en cours...
-                  </span>
-                </button>
-                <button
-                  (click)="closeDepositDrawer()"
-                  [disabled]="isProcessing"
-                  class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Annuler
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
       </div>
 
-      <!-- Drawer de retrait -->
-      <div
-        *ngIf="isRetraitDrawerOpen"
-        class="fixed inset-0 z-50 overflow-hidden"
-      >
-        <!-- Drawer -->
-        <div
-          class="absolute right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
-        >
-          <div class="flex flex-col h-full">
-            <!-- Header -->
-            <div
-              class="flex items-center justify-between p-6 border-b border-gray-200"
-            >
-              <h2 class="text-xl font-semibold text-gray-800">
-                Effectuer un retrait
-              </h2>
-              <button
-                (click)="closeRetraitDrawer()"
-                class="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Content -->
-            <div class="flex-1 p-6">
-              <div class="space-y-6">
-                <!-- Informations du compte -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                  <h3 class="text-sm font-medium text-gray-700 mb-2">
-                    Compte actuel
-                  </h3>
-                  <p class="text-2xl font-bold text-gray-800">
-                    {{
-                      userInfo?.compte?.solde?.toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2
-                      })
-                    }}
-                    FCFA
-                  </p>
-                  <p class="text-sm text-gray-600 mt-1">
-                    Montant maximum possible:
-                    {{ getMontantMaximumFormatted() }} FCFA
-                  </p>
-                </div>
-
-                <!-- Message de validation -->
-                <div
-                  *ngIf="showValidationMessage"
-                  class="p-3 rounded-lg text-sm"
-                  [ngClass]="{
-                    'bg-red-100 text-red-700 border border-red-200':
-                      validationType === 'error',
-                    'bg-yellow-100 text-yellow-700 border border-yellow-200':
-                      validationType === 'warning',
-                    'bg-green-100 text-green-700 border border-green-200':
-                      validationType === 'success'
-                  }"
-                >
-                  {{ validationMessage }}
-                </div>
-
-                <!-- Formulaire de retrait -->
-                <div class="space-y-4">
-                  <div>
-                    <label
-                      for="retraitAmount"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Montant à retirer (FCFA)
-                    </label>
-                    <input
-                      type="number"
-                      id="retraitAmount"
-                      [(ngModel)]="retraitAmount"
-                      (input)="onRetraitAmountChange()"
-                      placeholder="0.00"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                      [disabled]="isProcessing"
-                    />
-                    <p class="text-xs text-gray-500 mt-1">
-                      Montant minimum: 100 FCFA | Maximum: 500,000 FCFA
-                    </p>
-                  </div>
-
-                  <!-- Montants rapides -->
-                  <div>
-                    <p class="text-sm font-medium text-gray-700 mb-3">
-                      Montants rapides
-                    </p>
-                    <div class="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        (click)="
-                          retraitAmount = '1000'; onRetraitAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        1,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          retraitAmount = '5000'; onRetraitAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        5,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          retraitAmount = '10000'; onRetraitAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        10,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          retraitAmount = getMontantMaximumRetrait().toString();
-                          onRetraitAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        Maximum
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="p-6 border-t border-gray-200">
-              <div class="space-y-3">
-                <button
-                  (click)="processRetrait()"
-                  [disabled]="!retraitAmount || isProcessing"
-                  class="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span *ngIf="!isProcessing">Confirmer le retrait</span>
-                  <span
-                    *ngIf="isProcessing"
-                    class="flex items-center justify-center"
-                  >
-                    <svg
-                      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Traitement en cours...
-                  </span>
-                </button>
-                <button
-                  (click)="closeRetraitDrawer()"
-                  [disabled]="isProcessing"
-                  class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Annuler
-                </button>
-              </div>
-            </div>
+      <!-- Content -->
+      <div class="flex-1 p-2 sm:p-6">
+        <div class="space-y-6">
+          <!-- Informations du compte -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">
+              Compte actuel
+            </h3>
+            <p class="text-2xl font-bold text-gray-800">
+              {{
+                userInfo?.compte?.solde?.toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2
+                })
+              }}
+              FCFA
+            </p>
           </div>
-        </div>
-      </div>
 
-      <!-- Drawer de virement -->
-      <div
-        *ngIf="isVirementDrawerOpen"
-        class="fixed inset-0 z-50 overflow-hidden"
-      >
-        <!-- Drawer -->
-        <div
-          class="absolute right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
-        >
-          <div class="flex flex-col h-full">
-            <!-- Header -->
-            <div
-              class="flex items-center justify-between p-6 border-b border-gray-200"
-            >
-              <h2 class="text-xl font-semibold text-gray-800">
-                Effectuer un virement
-              </h2>
-              <button
-                (click)="closeVirementDrawer()"
-                class="text-gray-400 hover:text-gray-600 transition-colors"
+          <!-- Message de validation -->
+          <div
+            *ngIf="showValidationMessage"
+            class="p-3 rounded-lg text-sm"
+            [ngClass]="{
+              'bg-red-100 text-red-700 border border-red-200':
+                validationType === 'error',
+              'bg-yellow-100 text-yellow-700 border border-yellow-200':
+                validationType === 'warning',
+              'bg-green-100 text-green-700 border border-green-200':
+                validationType === 'success'
+            }"
+          >
+            {{ validationMessage }}
+          </div>
+
+          <!-- Formulaire de dépôt -->
+          <div class="space-y-4">
+            <div>
+              <label
+                for="depositAmount"
+                class="block text-sm font-medium text-gray-700 mb-2"
               >
-                <svg
-                  class="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </button>
+                Montant à déposer (FCFA)
+              </label>
+              <input
+                type="number"
+                id="depositAmount"
+                [(ngModel)]="depositAmount"
+                (input)="onDepositAmountChange()"
+                placeholder="0.00"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                [disabled]="isProcessing"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                Montant minimum: 100 FCFA | Maximum: 1,000,000 FCFA
+              </p>
             </div>
 
-            <!-- Content -->
-            <div class="flex-1 p-6 overflow-y-auto">
-              <div class="space-y-6">
-                <!-- Informations du compte -->
-                <div class="bg-gray-50 rounded-lg p-4">
-                  <h3 class="text-sm font-medium text-gray-700 mb-2">
-                    Compte actuel
-                  </h3>
-                  <p class="text-2xl font-bold text-gray-800">
-                    {{
-                      userInfo?.compte?.solde?.toLocaleString("fr-FR", {
-                        minimumFractionDigits: 2
-                      })
-                    }}
-                    FCFA
-                  </p>
-                </div>
-
-                <!-- Message de validation -->
-                <div
-                  *ngIf="showValidationMessage"
-                  class="p-3 rounded-lg text-sm"
-                  [ngClass]="{
-                    'bg-red-100 text-red-700 border border-red-200':
-                      validationType === 'error',
-                    'bg-yellow-100 text-yellow-700 border border-yellow-200':
-                      validationType === 'warning',
-                    'bg-green-100 text-green-700 border border-green-200':
-                      validationType === 'success'
-                  }"
-                >
-                  {{ validationMessage }}
-                </div>
-
-                <!-- Sélection du destinataire (affiché seulement si aucun utilisateur n'est sélectionné) -->
-                <div *ngIf="!selectedUserId" class="space-y-4">
-                  <div>
-                    <label
-                      for="searchUser"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Sélectionner un destinataire
-                    </label>
-                    <div class="relative">
-                      <input
-                        type="text"
-                        id="searchUser"
-                        [(ngModel)]="searchTerm"
-                        placeholder="Rechercher un utilisateur..."
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                        [disabled]="isProcessing"
-                      />
-                      <svg
-                        class="absolute right-3 top-3 w-5 h-5 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-
-                  <!-- Liste des utilisateurs -->
-                  <div
-                    class="max-h-48 overflow-y-auto border border-gray-200 rounded-lg"
-                  >
-                    <div
-                      *ngFor="let user of users"
-                      (click)="selectUser(user)"
-                      class="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                    >
-                      <div class="flex items-center space-x-3">
-                        <div
-                          class="w-8 h-8 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm"
-                        >
-                          {{ user.prenom?.charAt(0) }}{{ user.nom?.charAt(0) }}
-                        </div>
-                        <div class="flex-1">
-                          <p class="text-sm font-medium text-gray-800">
-                            {{ user.prenom }} {{ user.nom }}
-                          </p>
-                          <p class="text-xs text-gray-500">{{ user.email }}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      *ngIf="users.length === 0"
-                      class="p-4 text-center text-gray-500 text-sm"
-                    >
-                      Aucun utilisateur trouvé
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Utilisateur sélectionné -->
-                <div
-                  *ngIf="selectedUserId"
-                  class="bg-orange-50 border border-orange-200 rounded-lg p-4"
-                >
-                  <div class="flex items-center space-x-3">
-                    <div
-                      class="w-10 h-10 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold"
-                    >
-                      {{ getSelectedUser()?.prenom?.charAt(0)
-                      }}{{ getSelectedUser()?.nom?.charAt(0) }}
-                    </div>
-                    <div class="flex-1">
-                      <p class="text-sm font-medium text-gray-800">
-                        {{ getSelectedUser()?.prenom }}
-                        {{ getSelectedUser()?.nom }}
-                      </p>
-                      <p class="text-xs text-gray-500">
-                        {{ getSelectedUser()?.email }}
-                      </p>
-                    </div>
-                    <button
-                      (click)="clearUserSelection()"
-                      class="text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <svg
-                        class="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12"
-                        ></path>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Formulaire de virement (affiché seulement si un utilisateur est sélectionné) -->
-                <div *ngIf="selectedUserId" class="space-y-4">
-                  <div>
-                    <label
-                      for="virementAmount"
-                      class="block text-sm font-medium text-gray-700 mb-2"
-                    >
-                      Montant du virement (FCFA)
-                    </label>
-                    <input
-                      type="number"
-                      id="virementAmount"
-                      [(ngModel)]="virementAmount"
-                      (input)="onVirementAmountChange()"
-                      placeholder="0.00"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      [disabled]="isProcessing"
-                    />
-                    <p class="text-xs text-gray-500 mt-1">
-                      Montant minimum: 100 FCFA | Maximum: 1,000,000 FCFA
-                    </p>
-                  </div>
-
-                  <!-- Montants rapides -->
-                  <div>
-                    <p class="text-sm font-medium text-gray-700 mb-3">
-                      Montants rapides
-                    </p>
-                    <div class="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        (click)="
-                          virementAmount = '1000'; onVirementAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        1,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          virementAmount = '5000'; onVirementAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        5,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          virementAmount = '10000'; onVirementAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        10,000 FCFA
-                      </button>
-                      <button
-                        type="button"
-                        (click)="
-                          virementAmount = '50000'; onVirementAmountChange()
-                        "
-                        class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                        [disabled]="isProcessing"
-                      >
-                        50,000 FCFA
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="p-6 border-t border-gray-200">
-              <div class="space-y-3">
+            <!-- Montants rapides -->
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-3">
+                Montants rapides
+              </p>
+              <div class="grid grid-cols-2 gap-2">
                 <button
-                  (click)="processVirement()"
-                  [disabled]="
-                    !virementAmount || !selectedUserId || isProcessing
+                  type="button"
+                  (click)="
+                    depositAmount = '1000'; onDepositAmountChange()
                   "
-                  class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
                 >
-                  <span *ngIf="!isProcessing">Confirmer le virement</span>
-                  <span
-                    *ngIf="isProcessing"
-                    class="flex items-center justify-center"
-                  >
-                    <svg
-                      class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        class="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        stroke-width="4"
-                      ></circle>
-                      <path
-                        class="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Traitement en cours...
-                  </span>
+                  1,000 FCFA
                 </button>
                 <button
-                  (click)="closeVirementDrawer()"
+                  type="button"
+                  (click)="
+                    depositAmount = '5000'; onDepositAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
-                  class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Annuler
+                  5,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    depositAmount = '10000'; onDepositAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  10,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    depositAmount = '50000'; onDepositAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  50,000 FCFA
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-2 sm:p-6 border-t border-gray-200">
+        <div class="space-y-3">
+          <button
+            (click)="processDeposit()"
+            [disabled]="!depositAmount || isProcessing"
+            class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isProcessing">Confirmer le dépôt</span>
+            <span
+              *ngIf="isProcessing"
+              class="flex items-center justify-center"
+            >
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Traitement en cours...
+            </span>
+          </button>
+          <button
+            (click)="closeDepositDrawer()"
+            [disabled]="isProcessing"
+            class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer de retrait -->
+<div
+  *ngIf="isRetraitDrawerOpen"
+  class="fixed inset-0 z-50 overflow-hidden"
+>
+  <!-- Drawer -->
+  <div
+    class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+  >
+    <div class="flex flex-col h-full">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between p-2 sm:p-6 border-b border-gray-200"
+      >
+        <h2 class="text-xl font-semibold text-gray-800">
+          Effectuer un retrait
+        </h2>
+        <button
+          (click)="closeRetraitDrawer()"
+          class="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 p-2 sm:p-6">
+        <div class="space-y-6">
+          <!-- Informations du compte -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">
+              Compte actuel
+            </h3>
+            <p class="text-2xl font-bold text-gray-800">
+              {{
+                userInfo?.compte?.solde?.toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2
+                })
+              }}
+              FCFA
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+              Montant maximum possible:
+              {{ getMontantMaximumFormatted() }} FCFA
+            </p>
+          </div>
+
+          <!-- Message de validation -->
+          <div
+            *ngIf="showValidationMessage"
+            class="p-3 rounded-lg text-sm"
+            [ngClass]="{
+              'bg-red-100 text-red-700 border border-red-200':
+                validationType === 'error',
+              'bg-yellow-100 text-yellow-700 border border-yellow-200':
+                validationType === 'warning',
+              'bg-green-100 text-green-700 border border-green-200':
+                validationType === 'success'
+            }"
+          >
+            {{ validationMessage }}
+          </div>
+
+          <!-- Formulaire de retrait -->
+          <div class="space-y-4">
+            <div>
+              <label
+                for="retraitAmount"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Montant à retirer (FCFA)
+              </label>
+              <input
+                type="number"
+                id="retraitAmount"
+                [(ngModel)]="retraitAmount"
+                (input)="onRetraitAmountChange()"
+                placeholder="0.00"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                [disabled]="isProcessing"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                Montant minimum: 100 FCFA | Maximum: 500,000 FCFA
+              </p>
+            </div>
+
+            <!-- Montants rapides -->
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-3">
+                Montants rapides
+              </p>
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  (click)="
+                    retraitAmount = '1000'; onRetraitAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  1,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    retraitAmount = '5000'; onRetraitAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  5,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    retraitAmount = '10000'; onRetraitAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  10,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    retraitAmount = getMontantMaximumRetrait().toString();
+                    onRetraitAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  Maximum
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-2 sm:p-6 border-t border-gray-200">
+        <div class="space-y-3">
+          <button
+            (click)="processRetrait()"
+            [disabled]="!retraitAmount || isProcessing"
+            class="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isProcessing">Confirmer le retrait</span>
+            <span
+              *ngIf="isProcessing"
+              class="flex items-center justify-center"
+            >
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Traitement en cours...
+            </span>
+          </button>
+          <button
+            (click)="closeRetraitDrawer()"
+            [disabled]="isProcessing"
+            class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Annuler
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drawer de virement -->
+<div
+  *ngIf="isVirementDrawerOpen"
+  class="fixed inset-0 z-50 overflow-hidden"
+>
+  <!-- Drawer -->
+  <div
+    class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+  >
+    <div class="flex flex-col h-full">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between p-2 sm:p-6 border-b border-gray-200"
+      >
+        <h2 class="text-xl font-semibold text-gray-800">
+          Effectuer un virement
+        </h2>
+        <button
+          (click)="closeVirementDrawer()"
+          class="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 p-2 sm:p-6 overflow-y-auto">
+        <div class="space-y-6">
+          <!-- Informations du compte -->
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">
+              Compte actuel
+            </h3>
+            <p class="text-2xl font-bold text-gray-800">
+              {{
+                userInfo?.compte?.solde?.toLocaleString("fr-FR", {
+                  minimumFractionDigits: 2
+                })
+              }}
+              FCFA
+            </p>
+          </div>
+
+          <!-- Message de validation -->
+          <div
+            *ngIf="showValidationMessage"
+            class="p-3 rounded-lg text-sm"
+            [ngClass]="{
+              'bg-red-100 text-red-700 border border-red-200':
+                validationType === 'error',
+              'bg-yellow-100 text-yellow-700 border border-yellow-200':
+                validationType === 'warning',
+              'bg-green-100 text-green-700 border border-green-200':
+                validationType === 'success'
+            }"
+          >
+            {{ validationMessage }}
+          </div>
+
+          <!-- Sélection du destinataire (affiché seulement si aucun utilisateur n'est sélectionné) -->
+          <div *ngIf="!selectedUserId" class="space-y-4">
+            <div>
+              <label
+                for="searchUser"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Sélectionner un destinataire
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  id="searchUser"
+                  [(ngModel)]="searchTerm"
+                  placeholder="Rechercher un utilisateur..."
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  [disabled]="isProcessing"
+                />
+                <svg
+                  class="absolute right-3 top-3 w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Liste des utilisateurs -->
+            <div
+              class="max-h-48 overflow-y-auto border border-gray-200 rounded-lg"
+            >
+              <div
+                *ngFor="let user of users"
+                (click)="selectUser(user)"
+                class="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+              >
+                <div class="flex items-center space-x-3">
+                  <div
+                    class="w-8 h-8 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                  >
+                    {{ user.prenom?.charAt(0) }}{{ user.nom?.charAt(0) }}
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-800">
+                      {{ user.prenom }} {{ user.nom }}
+                    </p>
+                    <p class="text-xs text-gray-500">{{ user.email }}</p>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="users.length === 0"
+                class="p-4 text-center text-gray-500 text-sm"
+              >
+                Aucun utilisateur trouvé
+              </div>
+            </div>
+          </div>
+
+          <!-- Utilisateur sélectionné -->
+          <div
+            *ngIf="selectedUserId"
+            class="bg-orange-50 border border-orange-200 rounded-lg p-4"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-10 h-10 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold"
+              >
+                {{ getSelectedUser()?.prenom?.charAt(0)
+                }}{{ getSelectedUser()?.nom?.charAt(0) }}
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-800">
+                  {{ getSelectedUser()?.prenom }}
+                  {{ getSelectedUser()?.nom }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ getSelectedUser()?.email }}
+                </p>
+              </div>
+              <button
+                (click)="clearUserSelection()"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Formulaire de virement (affiché seulement si un utilisateur est sélectionné) -->
+          <div *ngIf="selectedUserId" class="space-y-4">
+            <div>
+              <label
+                for="virementAmount"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Montant du virement (FCFA)
+              </label>
+              <input
+                type="number"
+                id="virementAmount"
+                [(ngModel)]="virementAmount"
+                (input)="onVirementAmountChange()"
+                placeholder="0.00"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                [disabled]="isProcessing"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                Montant minimum: 100 FCFA | Maximum: 1,000,000 FCFA
+              </p>
+            </div>
+
+            <!-- Montants rapides -->
+            <div>
+              <p class="text-sm font-medium text-gray-700 mb-3">
+                Montants rapides
+              </p>
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  (click)="
+                    virementAmount = '1000'; onVirementAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  1,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    virementAmount = '5000'; onVirementAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  5,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    virementAmount = '10000'; onVirementAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  10,000 FCFA
+                </button>
+                <button
+                  type="button"
+                  (click)="
+                    virementAmount = '50000'; onVirementAmountChange()
+                  "
+                  class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  [disabled]="isProcessing"
+                >
+                  50,000 FCFA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-6 border-t border-gray-200">
+        <div class="space-y-3">
+          <button
+            (click)="processVirement()"
+            [disabled]="
+              !virementAmount || !selectedUserId || isProcessing
+            "
+            class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isProcessing">Confirmer le virement</span>
+            <span
+              *ngIf="isProcessing"
+              class="flex items-center justify-center"
+            >
+              <svg
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Traitement en cours...
+            </span>
+          </button>
+          <button
+            (click)="closeVirementDrawer()"
+            [disabled]="isProcessing"
+            class="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Annuler
+          </button>
         </div>
       </div>
     </div>

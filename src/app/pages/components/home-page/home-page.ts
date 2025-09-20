@@ -12,15 +12,24 @@ import { Auth } from '../../../authentification/services/auth/auth';
   styleUrl: './home-page.css',
 })
 export class HomePage implements OnInit {
-  constructor(
-    private auth: Auth,
-    private router: Router
-  ) {}
+  constructor(private auth: Auth, private router: Router) {}
+
+  loading = false;
 
   ngOnInit() {
     // Si l'utilisateur est connecté, le rediriger vers le dashboard
+    this.loading = true;
     if (this.auth.isAuthenticated()) {
-      this.router.navigateByUrl('/dashboard');
+      if (this.auth.checkUserRole('ADMIN')) {
+        console.log('admin');
+        this.loading = false;
+        this.router.navigateByUrl('/backoffice');
+      } else {
+        console.log('user');
+        this.loading = false;
+        this.router.navigateByUrl('/dashboard');
+      }
+      this.loading = false;
     }
   }
 
