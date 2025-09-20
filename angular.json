@@ -93,12 +93,12 @@
             "dev": {
               "buildTarget": "flux_transaction:build:dev"
             },
-            "production": {
-              "buildTarget": "flux_transaction:build:production"
-            },
             "staging": {
               "buildTarget": "flux_transaction:build:staging"
             }
+          },
+          "options": {
+            "allowedHosts": ["localhost", "127.0.0.1", "flux.hackbou.com", "transactions.hackbou.com", "api.transactions.hackbou.com"]
           },
           "defaultConfiguration": "dev"
         },
