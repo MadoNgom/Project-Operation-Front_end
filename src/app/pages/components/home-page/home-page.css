@@ -1,3 +1,24 @@
+/* Modern minimalist styles with original colors */
 .gradient-bg {
   background: linear-gradient(to left, #360d6c 40%, #bf0b47 90%);
+}
+
+.hero-title {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.cta-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 9999px;
+}
+
+.cta-button:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }

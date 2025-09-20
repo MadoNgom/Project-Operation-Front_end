@@ -61,6 +61,13 @@ export class Auth extends Abstract<any> {
     const userInfo = localStorage.getItem('user_info');
     return userInfo ? JSON.parse(userInfo) : null;
   }
+
+  checkUserRole(role: string): boolean {
+    const userInfo = this.getUserInfo();
+    console.log({ userRole: userInfo?.data?.role });
+    return userInfo?.data?.role === role;
+  }
+
   logout(): void {
     localStorage.clear();
     this.router.navigateByUrl('/');

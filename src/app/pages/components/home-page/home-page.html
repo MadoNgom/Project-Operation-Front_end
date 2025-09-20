@@ -1,24 +1,20 @@
-<section
-  class="min-h-screen bg-gradient-to-br from-purple-700 to-orange-600 text-white"
->
-  <!-- Navigation with max-width container -->
+<section class="min-h-screen bg-gradient-to-br from-purple-700 to-orange-600 text-white">
+  <!-- Navigation -->
   <app-nav></app-nav>
-  <!-- Main Content - using same container width as nav -->
-  <div
-    class="container mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row items-center justify-between"
-  >
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 md:px-8 py-12 flex flex-col lg:flex-row items-center justify-between">
     <!-- Left: Text -->
-    <div class="w-full lg:w-1/2 space-y-6 mb-10 lg:mb-0 lg:pr-8">
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+    <div class="w-full lg:w-1/2 space-y-8 mb-12 lg:mb-0 lg:pr-8">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-light leading-tight">
         Transfert d'argent facile
       </h1>
-      <p class="text-lg sm:text-xl md:text-2xl">
-        Envoyez et recevez d'argent en toute sécurité et fiabilité avec notre
-        plateforme.
+      <p class="text-lg sm:text-xl md:text-2xl font-light opacity-90">
+        Envoyez et recevez d'argent en toute sécurité et fiabilité avec notre plateforme moderne.
       </p>
       <button
-      (click)="navigateToLogin()"
-        class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105"
+        (click)="navigateToLogin()"
+        class="bg-white text-purple-700 hover:bg-gray-100 font-medium py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
       >
         Commencez maintenant
       </button>
