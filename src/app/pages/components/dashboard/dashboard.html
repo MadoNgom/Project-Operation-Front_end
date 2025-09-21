@@ -70,7 +70,9 @@
       </div>
 
       <!-- Overview Section -->
-      <div class="grid grid-cols-1 gap-2 sm:gap-4 md:gap-8 mb-2 sm:mb-4 md:mb-8">
+      <div
+        class="grid grid-cols-1 gap-2 sm:gap-4 md:gap-8 mb-2 sm:mb-4 md:mb-8"
+      >
         <!-- Total Balance Card (Large) -->
         <div class="bg-white rounded-xl shadow-sm p-4 md:p-6">
           <div class="flex justify-between items-start mb-2 sm:mb-4">
@@ -162,7 +164,7 @@
             <h3 class="text-base md:text-lg font-semibold text-gray-800">
               Historique des transactions
             </h3>
-            <!-- <div class="flex space-x-2">
+            <div class="flex space-x-2">
               <button
                 class="px-2 md:px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs md:text-sm hover:bg-gray-200 transition-colors"
               >
@@ -185,7 +187,7 @@
                   ></path>
                 </svg>
               </div>
-            </div> -->
+            </div>
           </div>
 
           <!-- Table Header -->
@@ -340,16 +342,12 @@
           {{ validationMessage }}
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
 <!-- Drawer de Dépôt -->
-<div
-  *ngIf="isDepositDrawerOpen"
-  class="fixed inset-0 z-50 overflow-hidden"
->
+<div *ngIf="isDepositDrawerOpen" class="fixed inset-0 z-50 overflow-hidden">
   <!-- Drawer -->
   <div
     class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
@@ -359,9 +357,7 @@
       <div
         class="flex items-center justify-between p-2 sm:p-6 border-b border-gray-200"
       >
-        <h2 class="text-xl font-semibold text-gray-800">
-          Effectuer un dépôt
-        </h2>
+        <h2 class="text-xl font-semibold text-gray-800">Effectuer un dépôt</h2>
         <button
           (click)="closeDepositDrawer()"
           class="text-gray-400 hover:text-gray-600 transition-colors"
@@ -447,9 +443,7 @@
               <div class="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  (click)="
-                    depositAmount = '1000'; onDepositAmountChange()
-                  "
+                  (click)="depositAmount = '1000'; onDepositAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -457,9 +451,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    depositAmount = '5000'; onDepositAmountChange()
-                  "
+                  (click)="depositAmount = '5000'; onDepositAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -467,9 +459,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    depositAmount = '10000'; onDepositAmountChange()
-                  "
+                  (click)="depositAmount = '10000'; onDepositAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -477,9 +467,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    depositAmount = '50000'; onDepositAmountChange()
-                  "
+                  (click)="depositAmount = '50000'; onDepositAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -500,10 +488,7 @@
             class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span *ngIf="!isProcessing">Confirmer le dépôt</span>
-            <span
-              *ngIf="isProcessing"
-              class="flex items-center justify-center"
-            >
+            <span *ngIf="isProcessing" class="flex items-center justify-center">
               <svg
                 class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -541,10 +526,7 @@
 </div>
 
 <!-- Drawer de retrait -->
-<div
-  *ngIf="isRetraitDrawerOpen"
-  class="fixed inset-0 z-50 overflow-hidden"
->
+<div *ngIf="isRetraitDrawerOpen" class="fixed inset-0 z-50 overflow-hidden">
   <!-- Drawer -->
   <div
     class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
@@ -646,9 +628,7 @@
               <div class="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  (click)="
-                    retraitAmount = '1000'; onRetraitAmountChange()
-                  "
+                  (click)="retraitAmount = '1000'; onRetraitAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -656,9 +636,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    retraitAmount = '5000'; onRetraitAmountChange()
-                  "
+                  (click)="retraitAmount = '5000'; onRetraitAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -666,9 +644,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    retraitAmount = '10000'; onRetraitAmountChange()
-                  "
+                  (click)="retraitAmount = '10000'; onRetraitAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -700,10 +676,7 @@
             class="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span *ngIf="!isProcessing">Confirmer le retrait</span>
-            <span
-              *ngIf="isProcessing"
-              class="flex items-center justify-center"
-            >
+            <span *ngIf="isProcessing" class="flex items-center justify-center">
               <svg
                 class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -741,10 +714,7 @@
 </div>
 
 <!-- Drawer de virement -->
-<div
-  *ngIf="isVirementDrawerOpen"
-  class="fixed inset-0 z-50 overflow-hidden"
->
+<div *ngIf="isVirementDrawerOpen" class="fixed inset-0 z-50 overflow-hidden">
   <!-- Drawer -->
   <div
     class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
@@ -950,9 +920,7 @@
               <div class="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  (click)="
-                    virementAmount = '1000'; onVirementAmountChange()
-                  "
+                  (click)="virementAmount = '1000'; onVirementAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -960,9 +928,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    virementAmount = '5000'; onVirementAmountChange()
-                  "
+                  (click)="virementAmount = '5000'; onVirementAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -970,9 +936,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    virementAmount = '10000'; onVirementAmountChange()
-                  "
+                  (click)="virementAmount = '10000'; onVirementAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -980,9 +944,7 @@
                 </button>
                 <button
                   type="button"
-                  (click)="
-                    virementAmount = '50000'; onVirementAmountChange()
-                  "
+                  (click)="virementAmount = '50000'; onVirementAmountChange()"
                   class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   [disabled]="isProcessing"
                 >
@@ -999,16 +961,11 @@
         <div class="space-y-3">
           <button
             (click)="processVirement()"
-            [disabled]="
-              !virementAmount || !selectedUserId || isProcessing
-            "
+            [disabled]="!virementAmount || !selectedUserId || isProcessing"
             class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span *ngIf="!isProcessing">Confirmer le virement</span>
-            <span
-              *ngIf="isProcessing"
-              class="flex items-center justify-center"
-            >
+            <span *ngIf="isProcessing" class="flex items-center justify-center">
               <svg
                 class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"

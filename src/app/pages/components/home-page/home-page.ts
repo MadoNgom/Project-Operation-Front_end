@@ -6,7 +6,7 @@ import { Auth } from '../../../authentification/services/auth/auth';
 
 @Component({
   selector: 'app-home-page',
-  imports: [Nav, RouterLink],
+  imports: [Nav],
   standalone: true,
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
