@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { Auth } from '../../../authentification/services/auth/auth';
 import { Transactions, ValidationResult } from './services/transactions';
 import { FormsModule } from '@angular/forms';
+import { RelativeDatePipe } from '../../../core/pipe/relative-date-pipe-pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RelativeDatePipe],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'],
 })
@@ -442,53 +443,5 @@ export class Dashboard implements OnInit {
 
   onAddRecipient() {
     console.log('Ajouter comme destinataire');
-  }
-
-  // Méthode pour formater la date
-  formatDate(dateString: string): string {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    // Si c'est aujourd'hui
-    if (diffDays === 0) {
-      return "Aujourd'hui " + this.formatTime(dateString);
-    }
-    // Si c'est hier
-    else if (diffDays === 1) {
-      return 'Hier ' + this.formatTime(dateString);
-    }
-    // Si c'est dans les 7 derniers jours
-    else if (diffDays <= 7) {
-      return date.toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
-    // Sinon, format complet
-    else {
-      return date.toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
-  }
-
-  // Méthode pour formater l'heure
-  formatTime(dateString: string): string {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
   }
 }

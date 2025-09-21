@@ -66,17 +66,12 @@ export class Auth extends Abstract<any> {
     this.router.navigateByUrl('/');
   }
   // get user profile
-  getUserProfile(): Observable<any> {
-    return this.read(`account`).pipe(
-      tap((response: any) => {
-        localStorage.setItem('user_info', JSON.stringify(response));
-      })
-    );
-  }
 
   getUserProfileV2(): Observable<any> {
     return this.read(`utilisateurs/me`).pipe(
       tap((response: any) => {
+        console.log('response', response);
+
         localStorage.setItem('user_info', JSON.stringify(response));
       })
     );

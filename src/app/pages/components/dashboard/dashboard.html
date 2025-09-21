@@ -272,7 +272,7 @@
                     }}
                   </span>
                   <span class="text-xs text-gray-500">
-                    {{ formatDate(transaction.dateTransaction) }}
+                    {{ transaction.dateTransaction | relativeDatePipe }}
                   </span>
                 </div>
               </div>
@@ -288,7 +288,7 @@
                 }}
               </div>
               <div class="hidden md:block text-sm text-gray-600">
-                {{ formatDate(transaction.dateTransaction) }}
+                {{ transaction.dateTransaction | relativeDatePipe }}
               </div>
               <div
                 class="hidden md:block text-sm font-medium"

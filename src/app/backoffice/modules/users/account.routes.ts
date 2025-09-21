@@ -4,6 +4,7 @@ import { SendTransactions } from './components/send-transactions/send-transactio
 import { WithdrawMoney } from './components/withdraw-money/withdraw-money';
 import { CancelTransactions } from './components/cancel-transactions/cancel-transactions';
 import { Account } from './account';
+import { userGuard } from '../../../core/guards/userGuard/user-guard';
 
 export default [
   {
@@ -18,22 +19,27 @@ export default [
       {
         path: 'account',
         component: Account,
+        canActivate: [userGuard],
       },
       {
         path: 'transactions',
         component: Transactions,
+        canActivate: [userGuard],
       },
       {
         path: 'send-money',
         component: SendTransactions,
+        canActivate: [userGuard],
       },
       {
         path: 'withdraw-money',
         component: WithdrawMoney,
+        canActivate: [userGuard],
       },
       {
         path: 'cancel-transactions',
         component: CancelTransactions,
+        canActivate: [userGuard],
       },
     ],
   },
