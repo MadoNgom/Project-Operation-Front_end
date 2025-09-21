@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Admin } from './admin';
 import { Transactions } from './components/transactions/transactions';
 import { Users } from './components/users/users';
+import { adminGuard } from '../../../core/guards/adminGuard/admin-guard';
 
 export default [
   {
@@ -14,12 +15,14 @@ export default [
         pathMatch: 'full',
       },
       {
-        path: 'users',
-        component: Users,
+        path: 'admin',
+        component: Admin,
+        canActivate: [adminGuard],
       },
       {
-        path: 'transactions',
-        component: Transactions,
+        path: 'users',
+        component: Users,
+        canActivate: [adminGuard],
       },
     ],
   },
