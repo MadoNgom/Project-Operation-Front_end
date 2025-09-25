@@ -38,7 +38,6 @@
 - **Angular 20.1.0** : Framework JavaScript moderne
 - **TypeScript 5.8.2** : Langage de programmation typé
 - **TailwindCSS 4.1.11** : Framework CSS utilitaire
-- **Chart.js & ng2-charts** : Visualisation de données
 - **JWT Decode** : Gestion des tokens d'authentification
 
 ### Backend (Connecté)
@@ -70,7 +69,7 @@
 
 1. **Cloner le repository**
 ```bash
-git clone <repository-url>
+git clone https://github.com/MadoNgom/Project-Operation-Front_end
 cd Project-Operation-Front_end
 ```
 
