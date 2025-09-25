@@ -8,10 +8,9 @@
 ## 📋 Description du Projet
 
 **FluxTransaction** est une application web moderne de transfert d'argent en ligne développée avec Angular. Elle permet aux utilisateurs d'effectuer des transactions financières de manière sécurisée et rapide, avec une interface utilisateur intuitive et des fonctionnalités complètes de gestion financière.
-
 ## ✨ Demo Application
-Application déployée :![Swagger](https://flux.hackbou.com)
-Lien API sur Swagger : ![Swagger](https://api.transactions.hackbou.com/swagger-ui/index.html)
+Application déployée : [flux.hackbou.com](https://flux.hackbou.com)  
+Lien API sur Swagger : [api.transactions.hackbou.comswagger-ui](https://api.transactions.hackbou.com/swagger-ui/index.html)
 
 ## ✨ Fonctionnalités Principales
 
